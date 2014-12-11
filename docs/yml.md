@@ -171,7 +171,7 @@ cap_drop:
   - SYS_ADMIN
 ```
 
-### working\_dir, entrypoint, user, hostname, domainname, mem\_limit, privileged, restart
+### working\_dir, entrypoint, user, hostname, domainname, mem\_limit, privileged, restart, cpuset, memswap_limit
 
 Each of these is a single value, analogous to its [docker run](https://docs.docker.com/reference/run/) counterpart.
 
@@ -185,8 +185,9 @@ domainname: foo.com
 
 mem_limit: 1000000000
 privileged: true
-
 restart: always
+cpuset: “0-3,5”
+memswap_limit: 1024
 ```
 
 ### docker\_host, docker\_cert\_path, and docker\_tls\_verify

@@ -17,6 +17,7 @@ from fig.service import (
     parse_volume_spec,
     build_volume_binding,
     APIError,
+    parse_cpuset,
 )
 
 
@@ -232,6 +233,27 @@ class ServiceTest(unittest.TestCase):
         self.assertFalse(self.mock_client.images.called)
         self.assertFalse(self.mock_client.build.called)
 
+    def test_valid_parse_cpusets(self):
+        valid_cpuset = "1,2,3-4,5"
+        valid_cpuset_spaced = "4, 2, 3-4 , 5"
+        self.assertEqual(parse_cpuset(None), None)
+        self.assertEqual(parse_cpuset(''), None)
+        self.assertEqual(parse_cpuset(valid_cpuset), valid_cpuset)
+        self.assertEqual(parse_cpuset(valid_cpuset_spaced), valid_cpuset_spaced)
+
+    def test_invalid_parse_cpusets(self):
+        with self.assertRaises(ConfigError):
+            parse_cpuset("1-")
+        with self.assertRaises(ConfigError):
+            parse_cpuset("1-2,")
+        with self.assertRaises(ConfigError):
+            parse_cpuset("4,")
+        with self.assertRaises(ConfigError):
+            parse_cpuset("1-3-4")
+        with self.assertRaises(ConfigError):
+            parse_cpuset("1-3-4-1-2-2-")
+        with self.assertRaises(ConfigError):
+            parse_cpuset("1-2,2,a")
 
 class ServiceVolumesTest(unittest.TestCase):
 
