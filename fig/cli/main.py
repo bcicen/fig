@@ -334,7 +334,7 @@ class TopLevelCommand(Command):
             exit_code = container.wait()
             if options['--rm']:
                 log.info("Removing %s..." % container.name)
-                project.client.remove_container(container.id)
+                service.client.remove_container(container.id)
             sys.exit(exit_code)
 
     def scale(self, project, options):
